@@ -16,10 +16,6 @@ router.get('/list', (req, res) => {
     /* models/board.js */
     Board.findAll({})
         .then(result => {
-            
-            console.log(result.length);
-            console.log(result[0].registedAt)
-            console.log(new Date(result[0].registedAt));
             res.status(200).send(result);
         })
         .catch(err => {
@@ -74,8 +70,6 @@ router.post('/', (req, res) => {
     let reqBody = req.body;
     let board = {};
 
-    console.log(reqBody.register);
-    console.log(reqBody.registedAt);
     Seq.getBoardCount()
         .then((result) => {
             board.no = result.count;
