@@ -2,37 +2,27 @@ export default {
   name: 'list',
   components: {},
   props: [],
-  data () {
+  data() {
     return {
-        boards : {}
+      boards: {}
     }
   },
-  computed: {
-
-  },
+  computed: {},
   created: function () {
     this.$http.get(`/api/board/list`).then((response) => {
 
       const resDataLength = response.data.length;
-      for(let i = 0; i< resDataLength; i++){
+      for (let i = 0; i < resDataLength; i++) {
         let date = new Date(response.data[i].registedAt),
-          year = date.getFullYear() ,
-          month = date.getMonth() + 1,
-          day = date.getDate(),
+          year = date.getFullYear(),
+          month = addZero(date.getMonth() + 1),
+          day = addZero(date.getDate()),
 
-          hour = date.getHours(),
-          minute = date.getMinutes(),
-          second = date.getSeconds()
-        ;
-
-        month = addZero(month);
-        day = addZero(day);
-        hour = addZero(hour);
-        minute = addZero(minute);
-        second = addZero(second);
-
-        response.data[i].registedAt = [year , month , day].join("-")
-         + " " + [hour,minute,second].join(":");
+          hour = addZero(date.getHours()),
+          minute = addZero(date.getMinutes()),
+          second = addZero(date.getSeconds());
+        response.data[i].registedAt = [year, month, day].join("-")
+          + " " + [hour, minute, second].join(":");
       }
       this.boards = response.data;
 
@@ -41,28 +31,28 @@ export default {
       this.$router.push('/board/list')
     });
 
-    function addZero( value ){
+    function addZero(value) {
       return value.toString().length < 2 ? '0' + value : value;
     }
   },
- beforeCreate: function () {
-   if (!this.$session.exists()) {
+  beforeCreate: function () {
+    if (!this.$session.exists()) {
 
-     this.$router.push('/member/login');
-   }
- },
-  mounted () {
+      this.$router.push('/member/login');
+    }
+  },
+  mounted() {
 
   },
   methods: {
-    boardList(){
+    boardList() {
       this.$http.get('/board/list')
         .then((response) => {
           this.board = response.data;
         })
 
     },
-    writeBoard(){
+    writeBoard() {
       this.$router.push('/board/write')
     }
   }
